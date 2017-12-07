@@ -1,0 +1,7 @@
+{
+  TFile *f=new TFile("simevent_CTPPS_CLU__REC_TRA_DB_mem_ALL_1900_fullCH_135.root");
+  Events->Draw("CTPPSPixelClusteredmDetSetVector_ctppsPixelClusters__CTPPS2.obj._sets.data.charge()");
+
+
+
+}
