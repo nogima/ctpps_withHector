@@ -1,9 +1,9 @@
-#include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixLinearInduceCharge.h"
+#include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixChargeShare.h"
 #include <iostream>
 #include "TFile.h"
 #include "TH2D.h"
 
-RPixLinearInduceCharge::RPixLinearInduceCharge(const edm::ParameterSet &params, uint32_t det_id)
+RPixChargeShare::RPixChargeShare(const edm::ParameterSet &params, uint32_t det_id)
  : det_id_(det_id), theRPixDetTopology_(), sqrt_2(sqrt(2.0))
 {
   verbosity_ = params.getParameter<int>("RPixVerbosity");
@@ -19,12 +19,12 @@ RPixLinearInduceCharge::RPixLinearInduceCharge(const edm::ParameterSet &params, 
  hChargeMap = (TH2D*)fChargeMap->Get("gChargeMap_Angle_0");
 }
 
-std::map<unsigned short, double, std::less<unsigned short> >  RPixLinearInduceCharge::Induce(
+std::map<unsigned short, double, std::less<unsigned short> >  RPixChargeShare::Share(
     const std::vector<RPixSignalPoint> &charge_map)
 {
   thePixelChargeMap.clear();
   if(verbosity_>1)
-    std::cout<<"RPixLinearInduceCharge "<<det_id_<<" : Clouds to be induced= "<<charge_map.size()<<std::endl;
+    std::cout<<"RPixChargeShare "<<det_id_<<" : Clouds to be induced= "<<charge_map.size()<<std::endl;
 
   double CH =0;
 
@@ -32,15 +32,15 @@ std::map<unsigned short, double, std::less<unsigned short> >  RPixLinearInduceCh
       i!=charge_map.end(); ++i)
   {
     double hit_pos_x,hit_pos_y;
-// Used to avoid the obort due to hits out of detector 
+// Used to avoid the abort due to hits out of detector 
 
     if (((*i).X()+16.6/2)<0||((*i).X()+16.6/2)>16.6) {
-      std::cout << "**** Atention ((*i).X()+simX_width_/2.)<0||((*i).X()+simX_width_/2.)>simX_width  " << std::endl;
+      std::cout << "**** Attention ((*i).X()+simX_width_/2.)<0||((*i).X()+simX_width_/2.)>simX_width  " << std::endl;
       std::cout << "(*i).X() = " << (*i).X() << std::endl;
       continue;
     }
     if (((*i).Y()+24.4/2.)<0||((*i).Y()+24.4/2.)>24.4) {
-      std::cout << "**** Atention ((*i).Y()+simY_width_/2.)<0||((*i).Y()+simY_width_/2.)>simY_width  " << std::endl;
+      std::cout << "**** Attention ((*i).Y()+simY_width_/2.)<0||((*i).Y()+simY_width_/2.)>simY_width  " << std::endl;
       std::cout << "(*i).Y() = " << (*i).Y() << std::endl;
       continue;
     }
@@ -49,19 +49,13 @@ std::map<unsigned short, double, std::less<unsigned short> >  RPixLinearInduceCh
     	(*i).X(), (*i).Y(), (*i).Sigma(), hit_pos_x, hit_pos_y);
     if(verbosity_>1)
     {
-      std::cout<<"RPixLinearInduceCharge "<<det_id_<<" : relevant_pixels = "
+      std::cout<<"RPixChargeShare "<<det_id_<<" : relevant_pixels = "
         <<relevant_pixels.size()<<std::endl;
     }
     for(std::vector<pixel_info>::const_iterator j = relevant_pixels.begin(); 
         j!=relevant_pixels.end(); ++j)
     {
-/* UNUSED VARIABLES
-      double pixel_begin_x = (*j).LowerSimXBorder();
-      double pixel_end_x = (*j).HigherSimXBorder();
-      double pixel_begin_y = (*j).LowerSimYBorder();
-      double pixel_end_y = (*j).HigherSimYBorder();
-      double sigma = (*i).Sigma();
-*/
+
       double effic = (*j).effFactor();
  
       unsigned short pixel_no = (*j).pixelIndex();
