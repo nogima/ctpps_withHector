@@ -3,8 +3,6 @@
 
 #include <map>
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-//#include "SimTotem/RPDigiProducer/interface/RPSimTypes.h"
-
 
 
 class RPixPileUpSignals

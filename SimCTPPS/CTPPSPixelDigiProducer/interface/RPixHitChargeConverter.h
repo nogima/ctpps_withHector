@@ -1,8 +1,6 @@
 #ifndef SimCTPPS_CTPPSPixelDigiProducer_RPix_HIT_CHARGE_CONVERTER_H
 #define SimCTPPS_CTPPSPixelDigiProducer_RPix_HIT_CHARGE_CONVERTER_H
 
-#include "SimDataFormats/TrackingHit/interface/PSimHit.h"
-#include <map>
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixLinearChargeCollectionDrifter.h"
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixLinearChargeDivider.h"

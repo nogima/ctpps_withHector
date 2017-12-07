@@ -1,8 +1,6 @@
 #ifndef SimCTPPS_CTPPSPixelDigiProducer_RPix_LINEAR_CHARGE_COLLECTION_DRIFTER_H
 #define SimCTPPS_CTPPSPixelDigiProducer_RPix_LINEAR_CHARGE_COLLECTION_DRIFTER_H
 
-#include <vector>
-#include <iostream>
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixSignalPoint.h"
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixEnergyDepositUnit.h"
