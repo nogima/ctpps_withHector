@@ -17,19 +17,6 @@
 
 #include "TFile.h"
 
-/*
-Single pixel DIGI-SIM comparison
-*/
-
-//#include "SimMuon/DTDigitizer/test/Histograms.h"
-/*
-  hDigis hDigis_global("Global");
-  hDigis hDigis_W0("Wheel0");
-  hDigis hDigis_W1("Wheel1");
-  hDigis hDigis_W2("Wheel2");
-
-  hHits hAllHits("AllHits");
-*/
 
 #define SELECTED_PIXEL_ROW 89
 #define SELECTED_PIXEL_COLUMN 23
@@ -50,8 +37,7 @@ CTPPSPixelDigiAnalyzer:: CTPPSPixelDigiAnalyzer(const ParameterSet& pset) : theR
   verbosity_ = pset.getParameter<int> ("Verbosity");
 #ifdef USE_MIDDLE_OF_PIXEL
   file = new TFile("CTPPSPixelDigiPlots2.root","RECREATE");
-// hOneHitperEvent = new TH2D("OneHitperEvent","One Hit per Event",10,1,1.1,10,-8.511,-8.361);
-// hOneHitperEvent2 = new TH2D("OneHitperEvent2","One Hit per Event 2",10,1,1.1,10,-8.511,-8.361);
+
   hOneHitperEvent = new TH2D("OneHitperEvent","One Hit per Event",30,-8.511,-8.361,20,1,1.1);
   hOneHitperEvent2 = new TH2D("OneHitperEvent2","One Hit per Event 2",30,-8.511,-8.361,20,1,1.1);
 #else
@@ -64,7 +50,7 @@ CTPPSPixelDigiAnalyzer:: CTPPSPixelDigiAnalyzer(const ParameterSet& pset) : theR
   hOneHitperEvent2Center = new TH2D("OneHitperEvent2Center","Cluster Size 2",30,-0.075,0.075,20,-0.05,0.05);
 #endif
   file->cd();
- hAllHits = new TH2D("AllHits","All Hits",10,1,1.1,10,-8.55,-8.4);
+  hAllHits = new TH2D("AllHits","All Hits",10,1,1.1,10,-8.55,-8.4);
 
 //  hAllHits = new TH2D("AllHits","All Hits",100,-5,5,100,-11,11);
   if(file->IsOpen()) cout<<"file open!"<<endl;
@@ -97,28 +83,28 @@ void CTPPSPixelDigiAnalyzer::endJob(){
   hDigis_W2.Write();
   hAllHits.Write();
 */
- hAllHits->Write();
- hOneHitperEvent->Write();
- hOneHitperEvent2->Write();
- hOneHitperEventCenter->Write();
- hOneHitperEvent2Center->Write();
+  hAllHits->Write();
+  hOneHitperEvent->Write();
+  hOneHitperEvent2->Write();
+  hOneHitperEventCenter->Write();
+  hOneHitperEvent2Center->Write();
   file->Close();
 
   cout << "found_corresponding_digi_count: " << found_corresponding_digi_count << endl;
   cout << "Cumulative cluster size (1,2,>2) = " << cumulative_cluster_size[0] << ", " << cumulative_cluster_size[1] << ", " << cumulative_cluster_size[2] << endl;
 
-   delete file;
-   delete hAllHits;
-   delete hOneHitperEvent;
-   delete hOneHitperEvent2;
-   delete hOneHitperEventCenter;
-   delete hOneHitperEvent2Center;
+  delete file;
+  delete hAllHits;
+  delete hOneHitperEvent;
+  delete hOneHitperEvent2;
+  delete hOneHitperEventCenter;
+  delete hOneHitperEvent2Center;
 
 }
 
 void  CTPPSPixelDigiAnalyzer::analyze(const Event & event, const EventSetup& eventSetup){
   if(verbosity_>0)cout << "--- Run: " << event.id().run()
-       << " Event: " << event.id().event() << endl;
+		       << " Event: " << event.id().event() << endl;
   
   cout << "                                                            I do love Pixels     " << endl;  
   Handle<PSimHitContainer> simHits; 
@@ -190,144 +176,144 @@ void  CTPPSPixelDigiAnalyzer::analyze(const Event & event, const EventSetup& eve
 #endif
 #endif
 
-    && hit->detUnitId() ==  SELECTED_UNITID){
-      hit_inside_selected_pixel[0]=entryP.x();
-      hit_inside_selected_pixel[1]=entryP.y();
-      found_hit_inside_selected_pixel = true;
+	     && hit->detUnitId() ==  SELECTED_UNITID){
+	    hit_inside_selected_pixel[0]=entryP.x();
+	    hit_inside_selected_pixel[1]=entryP.y();
+	    found_hit_inside_selected_pixel = true;
 #ifdef USE_MIDDLE_OF_PIXEL_2
-      hAllHits->Fill(midP.x(),midP.y());
-      myX=midP.x();
-      myY=midP.y();
+	    hAllHits->Fill(midP.x(),midP.y());
+	    myX=midP.x();
+	    myY=midP.y();
 #else
-      hAllHits->Fill(entryP.x(),entryP.y());
-      myX=entryP.x();
-      myY=entryP.y();
+	    hAllHits->Fill(entryP.x(),entryP.y());
+	    myX=entryP.x();
+	    myY=entryP.y();
 #endif
-     if(verbosity_>2)   
-	cout << hit_inside_selected_pixel[0] << " " << hit_inside_selected_pixel[1] << endl;
-    }
+	    if(verbosity_>2)   
+	      cout << hit_inside_selected_pixel[0] << " " << hit_inside_selected_pixel[1] << endl;
+	  }
 
 //--------------
 
-    if(verbosity_>1)
-      if( hit->timeOfFlight() > 0){
-	cout << "DetId: " << hit->detUnitId()
-	     <<"PID: "<<hit->particleType()
-	     <<" TOF: "<<hit->timeOfFlight()
-	     <<" Proc Type: "<<hit->processType() 
-	     <<" p: " << hit->pabs()
-	     <<" x = " << entryP.x() << "   y = " <<entryP.y() <<  "  z = " << entryP.z() <<endl;
-      //     hAllHits.FillTOF(hit->timeOfFlight());
+	  if(verbosity_>1)
+	    if( hit->timeOfFlight() > 0){
+	      cout << "DetId: " << hit->detUnitId()
+		   <<"PID: "<<hit->particleType()
+		   <<" TOF: "<<hit->timeOfFlight()
+		   <<" Proc Type: "<<hit->processType() 
+		   <<" p: " << hit->pabs()
+		   <<" x = " << entryP.x() << "   y = " <<entryP.y() <<  "  z = " << entryP.z() <<endl;
+	    //     hAllHits.FillTOF(hit->timeOfFlight());
 
 
-      }
-  }
+	    }
+	  }
 
 
-  if(verbosity_>0)
-    std::cout << "\n=================== RPDA Starting Digi access" << "  ===================" << std::endl;
-  int numberOfDetUnits = 0;
+       if(verbosity_>0)
+	 std::cout << "\n=================== RPDA Starting Digi access" << "  ===================" << std::endl;
+       int numberOfDetUnits = 0;
     
 // Iterate on detector units
-  edm::DetSetVector<CTPPSPixelDigi>::const_iterator DSViter = CTPPSPixelDigis->begin();
+       edm::DetSetVector<CTPPSPixelDigi>::const_iterator DSViter = CTPPSPixelDigis->begin();
 
-   for( ; DSViter != CTPPSPixelDigis->end(); DSViter++) {
-    ++numberOfDetUnits;
+       for( ; DSViter != CTPPSPixelDigis->end(); DSViter++) {
+	 ++numberOfDetUnits;
  
-    DetId detIdObject(DSViter->detId());
-    if(verbosity_>1)       std::cout << "DetId: " << DSViter->detId()<< std::endl;
+	 DetId detIdObject(DSViter->detId());
+	 if(verbosity_>1)       std::cout << "DetId: " << DSViter->detId()<< std::endl;
 
-    bool found_corresponding_digi = false;
-    unsigned int corresponding_digi_cluster_size = 0;
+	 bool found_corresponding_digi = false;
+	 unsigned int corresponding_digi_cluster_size = 0;
 
 // looping over digis in a unit id
-    edm::DetSet<CTPPSPixelDigi>::const_iterator begin = (*DSViter).begin();
-    edm::DetSet<CTPPSPixelDigi>::const_iterator end = (*DSViter).end();
+	 edm::DetSet<CTPPSPixelDigi>::const_iterator begin = (*DSViter).begin();
+	 edm::DetSet<CTPPSPixelDigi>::const_iterator end = (*DSViter).end();
 
-    if(verbosity_>2){
-      std::cout << "FF  "<< DSViter->detId() << std::endl;
+	 if(verbosity_>2){
+	   std::cout << "FF  "<< DSViter->detId() << std::endl;
            for( edm::DetSet<CTPPSPixelDigi>::const_iterator di = begin; di != end; di++){
-	       std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
+	     std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
 
-	       // reconvert the digi to local coordinates
-  double lx;
-  double ly;
-  double ux;
-  double uy;
-  unsigned int rr = di->row();
-  unsigned int cc = di->column();
+	   // reconvert the digi to local coordinates
+	     double lx;
+	     double ly;
+	     double ux;
+	     double uy;
+	     unsigned int rr = di->row();
+	     unsigned int cc = di->column();
 // theRPixDetTopology_.pixelRange(SELECTED_PIXEL_ROW,SELECTED_PIXEL_COLUMN,selected_pixel_lower_x,selected_pixel_upper_x,selected_pixel_lower_y,selected_pixel_upper_y);
-  theRPixDetTopology_.pixelRange(rr,cc,lx,ux,ly,uy);
+	     theRPixDetTopology_.pixelRange(rr,cc,lx,ux,ly,uy);
 
-	       cout << " pixel boundaries x low up, y low up " << lx << " "<< ux << " "<< ly << " "<< uy << endl;
+	     cout << " pixel boundaries x low up, y low up " << lx << " "<< ux << " "<< ly << " "<< uy << endl;
 
 	   }
-    }
+	 }
 
-  //   if(DSViter->detId()/1e6 >2198.8 && DSViter->detId()/1e6 <2198.9) {    // looping only on one plane
-    if(DSViter->detId() == SELECTED_UNITID && found_hit_inside_selected_pixel
-       ){
-      for( edm::DetSet<CTPPSPixelDigi>::const_iterator di = begin; di != end; di++){
+       //   if(DSViter->detId()/1e6 >2198.8 && DSViter->detId()/1e6 <2198.9) {    // looping only on one plane
+	 if(DSViter->detId() == SELECTED_UNITID && found_hit_inside_selected_pixel
+	    ){
+	   for( edm::DetSet<CTPPSPixelDigi>::const_iterator di = begin; di != end; di++){
 
-	if(verbosity_>1)  	
-	  std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
+	     if(verbosity_>1)  	
+	       std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
 	
-	if( di->row() == SELECTED_PIXEL_ROW && di->column() == SELECTED_PIXEL_COLUMN ){
-	  found_corresponding_digi_count++;
-	  found_corresponding_digi = true;
-	  corresponding_digi_cluster_size = 1;
+	     if( di->row() == SELECTED_PIXEL_ROW && di->column() == SELECTED_PIXEL_COLUMN ){
+	       found_corresponding_digi_count++;
+	       found_corresponding_digi = true;
+	       corresponding_digi_cluster_size = 1;
 	  
-	}
+	     }
 
 
-      }
+	   }
 //if coresponding digi found, re-loop to look for adjacent pixels
-      if( found_corresponding_digi){
-	for( edm::DetSet<CTPPSPixelDigi>::const_iterator di = begin; di != end; di++){
+	   if( found_corresponding_digi){
+	     for( edm::DetSet<CTPPSPixelDigi>::const_iterator di = begin; di != end; di++){
 	  
-	  if(verbosity_>1)  	
-	    std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
+	       if(verbosity_>1)  	
+		 std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
 	  
-	  if( 
-	     (di->row() == SELECTED_PIXEL_ROW+1 && di->column() == SELECTED_PIXEL_COLUMN)
-|| 	     (di->row() == SELECTED_PIXEL_ROW-1 && di->column() == SELECTED_PIXEL_COLUMN)
-|| 	     (di->row() == SELECTED_PIXEL_ROW && di->column() == SELECTED_PIXEL_COLUMN+1)
-|| 	     (di->row() == SELECTED_PIXEL_ROW && di->column() == SELECTED_PIXEL_COLUMN-1)
-	      ){
-	    corresponding_digi_cluster_size++;	  
-	    std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
-	  }
-	}
-      }
+	       if( 
+		  (di->row() == SELECTED_PIXEL_ROW+1 && di->column() == SELECTED_PIXEL_COLUMN)
+		  || 	     (di->row() == SELECTED_PIXEL_ROW-1 && di->column() == SELECTED_PIXEL_COLUMN)
+		  || 	     (di->row() == SELECTED_PIXEL_ROW && di->column() == SELECTED_PIXEL_COLUMN+1)
+		  || 	     (di->row() == SELECTED_PIXEL_ROW && di->column() == SELECTED_PIXEL_COLUMN-1)
+		   ){
+		 corresponding_digi_cluster_size++;	  
+		 std::cout << "           Digi row  " << di->row() << ", col "<<di->column() <<std::endl ;
+	       }
+	     }
+	   }
        
 
 
-    }
-    if( corresponding_digi_cluster_size >0){
-      std::cout << "corresponding_digi_cluster_size in the event: " << corresponding_digi_cluster_size << std::endl;
-    //     hOneHitperEvent->Fill(myX,myY);
-      hOneHitperEvent->Fill(myY,myX);
-      hOneHitperEventCenter->Fill(myY-CENTERY,myX-CENTERX);
+	 }
+	 if( corresponding_digi_cluster_size >0){
+	   std::cout << "corresponding_digi_cluster_size in the event: " << corresponding_digi_cluster_size << std::endl;
+	 //     hOneHitperEvent->Fill(myX,myY);
+	   hOneHitperEvent->Fill(myY,myX);
+	   hOneHitperEventCenter->Fill(myY-CENTERY,myX-CENTERX);
 
-      if(corresponding_digi_cluster_size<3){
-	cumulative_cluster_size[corresponding_digi_cluster_size-1]++;
+	   if(corresponding_digi_cluster_size<3){
+	     cumulative_cluster_size[corresponding_digi_cluster_size-1]++;
 //	if(corresponding_digi_cluster_size>1)hOneHitperEvent2->Fill(myX,myY);
-  	if(corresponding_digi_cluster_size>1){
+	     if(corresponding_digi_cluster_size>1){
 
-	  hOneHitperEvent2->Fill(myY,myX);
-	  hOneHitperEvent2Center->Fill(myY-CENTERY,myX-CENTERX);
-	}
-      }
-      else{
-	cumulative_cluster_size[2]++;
+	       hOneHitperEvent2->Fill(myY,myX);
+	       hOneHitperEvent2Center->Fill(myY-CENTERY,myX-CENTERX);
+	     }
+	   }
+	   else{
+	     cumulative_cluster_size[2]++;
 //	hOneHitperEvent2->Fill(myX,myY);
-  	hOneHitperEvent2->Fill(myY,myX);
-  	hOneHitperEvent2Center->Fill(myY-CENTERY,myX-CENTERX);
-      }
-    }
-  }
+	     hOneHitperEvent2->Fill(myY,myX);
+	     hOneHitperEvent2Center->Fill(myY-CENTERY,myX-CENTERX);
+	   }
+	 }
+       }
      
-  if(verbosity_>1)       std::cout << "numberOfDetUnits in the event: " << numberOfDetUnits << std::endl;
+       if(verbosity_>1)       std::cout << "numberOfDetUnits in the event: " << numberOfDetUnits << std::endl;
 
 
        }
@@ -336,4 +322,4 @@ void  CTPPSPixelDigiAnalyzer::analyze(const Event & event, const EventSetup& eve
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
-DEFINE_FWK_MODULE(CTPPSPixelDigiAnalyzer);
+    DEFINE_FWK_MODULE(CTPPSPixelDigiAnalyzer);

@@ -1,3 +1,4 @@
+
 #ifndef SimCTPPS_CTPPSDigiProducer_CTPPSPixelDigiProducer_h
 #define SimCTPPS_CTPPSDigiProducer_CTPPSPixelDigiProducer_h
 
@@ -15,7 +16,7 @@
 */
 //
 // Original Author:  F.Ferro
-// From TOTEM RPDigiProducer 
+
 //
 
 #include "boost/shared_ptr.hpp"
@@ -35,32 +36,19 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-//#include "DataFormats/TotemRPDataTypes/interface/RPStripDigi.h"
-//#include "DataFormats/TotemRPDataTypes/interface/RPTypes.h"
 
 //  ****  CTPPS
 #include "DataFormats/CTPPSDigi/interface/CTPPSPixelDigi.h"
 #include "DataFormats/CTPPSDigi/interface/CTPPSPixelDigiCollection.h"
 
-//#include "DataFormats/TotemRPDataTypes/interface/RPDetTrigger.h"
-//#include "SimTotem/RPDigiProducer/interface/RPSimTypes.h"
-
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixDetDigitizer.h"
 #include "SimDataFormats/CrossingFrame/interface/MixCollection.h"
-//#include "DataFormats/CTPPSDetId/interface/CTPPSPixelDetId.h"
 
 #include "DataFormats/Common/interface/DetSet.h"
-//#include "SimTotem/RPDigiProducer/interface/DeadChannelsManager.h"
-
-//
-// class decleration
-//
-
 
 namespace CLHEP {
   class HepRandomEngine;
 }
-
 
 class CTPPSPixelDigiProducer : public edm::EDProducer {
    public:
@@ -88,8 +76,6 @@ class CTPPSPixelDigiProducer : public edm::EDProducer {
       std::vector<edm::DetSet<CTPPSPixelDigi> > theDigiVector;
 
 
-//      std::vector<edm::DetSet<RPDetTrigger> > theTriggerVector;
-
       CLHEP::HepRandomEngine* rndEngine = nullptr;
       int verbosity_;
 
@@ -107,4 +93,4 @@ class CTPPSPixelDigiProducer : public edm::EDProducer {
 };
 
 
-#endif  //CTPPSPixelDigiProducer
+#endif

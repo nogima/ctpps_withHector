@@ -9,12 +9,12 @@
  * It basically defines a quantum of energy, with a position.
  */
 class RPixEnergyDepositUnit{
- public:
-  RPixEnergyDepositUnit(): _energy(0),_position(0,0,0){}
-  RPixEnergyDepositUnit(double energy, double x, double y, double z):
-    _energy(energy),_position(x,y,z){}
-  RPixEnergyDepositUnit(double energy, const Local3DPoint &position):
-    _energy(energy),_position(position){}
+public:
+RPixEnergyDepositUnit(): _energy(0),_position(0,0,0){}
+RPixEnergyDepositUnit(double energy, double x, double y, double z):
+  _energy(energy),_position(x,y,z){}
+RPixEnergyDepositUnit(double energy, const Local3DPoint &position):
+  _energy(energy),_position(position){}
   inline double X() const{return _position.x();}
   inline double Y() const{return _position.y();}
   inline double Z() const{return _position.z();}
@@ -23,7 +23,7 @@ class RPixEnergyDepositUnit{
   inline Local3DPoint Position() const { return _position;}
   inline Local3DPoint& Position() { return _position;}
   
- private:
+private:
   double _energy;
   Local3DPoint _position;
 };
