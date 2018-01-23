@@ -4,7 +4,7 @@ mixSimHits = cms.PSet(
     input = cms.VInputTag(  # note that this list needs to be in the same order as the subdets
         #cms.InputTag("g4SimHits","BSCHits"), cms.InputTag("g4SimHits","BCM1FHits"), cms.InputTag("g4SimHits","PLTHits"), cms.InputTag("g4SimHits","FP420SI"),
         cms.InputTag("g4SimHits","MuonCSCHits"), cms.InputTag("g4SimHits","MuonDTHits"), cms.InputTag("g4SimHits","MuonRPCHits"), 
-        cms.InputTag("g4SimHits","MuonGEMHits"),cms.InputTag("g4SimHits","TotemHitsRP"), cms.InputTag("g4SimHits","CTPPSPixelHits"),
+        cms.InputTag("g4SimHits","MuonGEMHits"), cms.InputTag("g4SimHits","TotemHitsRP"), cms.InputTag("g4SimHits","CTPPSPixelHits"),
         #cms.InputTag("g4SimHits","TotemHitsRP"), cms.InputTag("g4SimHits","TotemHitsT1"), cms.InputTag("g4SimHits","TotemHitsT2Gem"),
         cms.InputTag("g4SimHits","TrackerHitsPixelBarrelHighTof"), cms.InputTag("g4SimHits","TrackerHitsPixelBarrelLowTof"), 
         cms.InputTag("g4SimHits","TrackerHitsPixelEndcapHighTof"), cms.InputTag("g4SimHits","TrackerHitsPixelEndcapLowTof"), cms.InputTag("g4SimHits","TrackerHitsTECHighTof"), cms.InputTag("g4SimHits","TrackerHitsTECLowTof"), cms.InputTag("g4SimHits","TrackerHitsTIBHighTof"), 
@@ -19,7 +19,7 @@ mixSimHits = cms.PSet(
         'MuonDTHits', 
         'MuonRPCHits', 
         'MuonGEMHits',
-       # 'TotemHitsRP', 
+        'TotemHitsRP', 
        # 'TotemHitsT1', 
        # 'TotemHitsT2Gem', 
         'CTPPSPixelHits',
@@ -40,6 +40,7 @@ mixSimHits = cms.PSet(
         'MuonDTHits', 
         'MuonRPCHits',
         'MuonGEMHits',
+        'TotemHitsRP', 
 	'CTPPSPixelHits'), 
     #crossingFrames = cms.untracked.vstring(
     #    'BSCHits',

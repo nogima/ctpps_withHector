@@ -10,7 +10,7 @@
 		<Constant name="RP_147_Left_Det_Dist_0" value=" +43.000*mm"/> <!-- RESOLVER:  +9.129, offset:  +0.000 -->
 		<Constant name="RP_147_Left_Det_Dist_1" value=" +43.000*mm"/> <!-- RESOLVER:  +8.885, offset:  +0.000 -->
 		<Constant name="RP_147_Left_Det_Dist_2" value=" +43.000*mm"/> <!-- RESOLVER:  +6.480, offset:  +0.000 -->
-		<Constant name="RP_147_Left_Det_Dist_3" value=" +43.000*mm"/> <!-- RESOLVER:  +6.181, offset:  +0.000 -->
+		<Constant name="RP_147_Left_Det_Dist_3" value=" +3.000*mm"/> <!-- RESOLVER:  +6.181, offset:  +0.000 -->
 		<Constant name="RP_147_Left_Det_Dist_4" value=" +43.000*mm"/> <!-- RESOLVER:  +8.043, offset:  +0.000 -->
 		<Constant name="RP_147_Left_Det_Dist_5" value=" +43.000*mm"/> <!-- RESOLVER:  +8.320, offset:  +0.000 -->
 
@@ -26,7 +26,7 @@
 		<Constant name="RP_147_Right_Det_Dist_0" value="+43.000*mm"/> <!-- RESOLVER:  +9.052, offset:  +0.000 -->
 		<Constant name="RP_147_Right_Det_Dist_1" value="+43.000*mm"/> <!-- RESOLVER:  +8.017, offset:  +0.000 -->
 		<Constant name="RP_147_Right_Det_Dist_2" value="+43.000*mm"/> <!-- RESOLVER:  +6.605, offset:  +0.000 -->
-		<Constant name="RP_147_Right_Det_Dist_3" value="+43.000*mm"/> <!-- RESOLVER:  +5.319, offset:  +0.000 -->
+		<Constant name="RP_147_Right_Det_Dist_3" value="+3.000*mm"/> <!-- RESOLVER:  +5.319, offset:  +0.000 -->
 		<Constant name="RP_147_Right_Det_Dist_4" value="+43.000*mm"/> <!-- RESOLVER:  +7.553, offset:  +0.000 -->
 		<Constant name="RP_147_Right_Det_Dist_5" value="+43.000*mm"/> <!-- RESOLVER:  +7.363, offset:  +0.000 -->
 

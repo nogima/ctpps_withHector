@@ -525,8 +525,12 @@ void CTPPSSD::StoreHit(CTPPSG4Hit* hit) {
 
 void CTPPSSD::ResetForNewPrimary() {
 
+   //std::cout << " hitPoint x , y , z  = " << hitPoint.x() << " , " << hitPoint.y() <<  " , " << hitPoint.z() <<std::endl; 
+
   entrancePoint  = SetToLocal(hitPoint);
   
+   //std::cout << "  LocalPoint x , y , z  = " << entrancePoint.x() << " , " << entrancePoint.y() <<  " , " << entrancePoint.z() <<std::endl; 
+   //std::cout << " -------------------------------------------------------------------- "  <<std::endl; 
   incidentEnergy = preStepPoint->GetKineticEnergy();
 }
 
