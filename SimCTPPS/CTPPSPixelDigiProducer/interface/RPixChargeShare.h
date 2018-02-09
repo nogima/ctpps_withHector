@@ -3,7 +3,6 @@
 
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include <vector>
-
 #include "Geometry/VeryForwardGeometry/interface/CTPPSPixelSimTopology.h"
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixSignalPoint.h"
 class TFile;
@@ -20,9 +19,11 @@ private:
   std::map<unsigned short, double, std::less<unsigned short> > thePixelChargeMap;
   CTPPSPixelSimTopology theRPixDetTopology_;
   double sqrt_2;
+  double chargeshare2E[4][60][40];
   int no_of_pixels_;
   int verbosity_;
   std::string ChargeMapFile_;
+  std::string ChargeMapFile2E_[4];
   TFile * fChargeMap;
   TH2D * hChargeMap;
 

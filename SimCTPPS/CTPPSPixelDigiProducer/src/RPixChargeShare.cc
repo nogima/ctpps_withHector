@@ -1,5 +1,6 @@
 #include "SimCTPPS/CTPPSPixelDigiProducer/interface/RPixChargeShare.h"
 #include <iostream>
+#include <fstream>
 #include "TFile.h"
 #include "TH2D.h"
 
@@ -8,19 +9,45 @@ RPixChargeShare::RPixChargeShare(const edm::ParameterSet &params, uint32_t det_i
 {
   verbosity_ = params.getParameter<int>("RPixVerbosity");
   signalCoupling_.clear();
-  ChargeMapFile_ = params.getParameter<std::string>("ChargeMapFile");
+  ChargeMapFile_      = params.getParameter<std::string>("ChargeMapFile");
+  ChargeMapFile2E_[0] = params.getParameter<std::string>("ChargeMapFile2E");
+  ChargeMapFile2E_[1] = params.getParameter<std::string>("ChargeMapFile2E_2X");
+  ChargeMapFile2E_[2] = params.getParameter<std::string>("ChargeMapFile2E_2Y");
+  ChargeMapFile2E_[3] = params.getParameter<std::string>("ChargeMapFile2E_2X2Y");
 // di default =1
   double coupling_constant_ = params.getParameter<double>("RPixCoupling");
   signalCoupling_.push_back(coupling_constant_);
   signalCoupling_.push_back( (1.0-coupling_constant_)/2 );
   
   no_of_pixels_ = theRPixDetTopology_.detPixelNo();
+
   fChargeMap = new TFile(ChargeMapFile_.c_str());
   hChargeMap = (TH2D*)fChargeMap->Get("gChargeMap_Angle_0");
+
+  double xMap, yMap;
+  double chargeprobcollect;
+  int xUpper[]={75,150,75,150};
+  int yUpper[]={50,50,100,100};
+  int ix,iy;
+  for(int i=0;i<4;i++){
+   std::ifstream fChargeMap (ChargeMapFile2E_[i]);
+   if (fChargeMap.is_open())
+   {
+     while (fChargeMap>>xMap>>yMap>>chargeprobcollect )
+     {
+      ix = int((xMap+xUpper[i])/5);
+      iy = int((yMap+yUpper[i])/5);
+      chargeshare2E[i][ix][iy]=chargeprobcollect;
+//      std::cout << ix << " " << iy << " psize = " << i  << std::endl;
+     }
+     fChargeMap.close();
+   }
+   else std::cout << "Unable to open charge Map file"; 
+  }
 }
 
 std::map<unsigned short, double, std::less<unsigned short> >  RPixChargeShare::Share(
-										     const std::vector<RPixSignalPoint> &charge_map)
+     const std::vector<RPixSignalPoint> &charge_map)
 {
   thePixelChargeMap.clear();
   if(verbosity_>1)
@@ -77,15 +104,40 @@ std::map<unsigned short, double, std::less<unsigned short> >  RPixChargeShare::S
 	    double pixel_lower_y=0;
 	    double pixel_upper_x=0;
 	    double pixel_upper_y=0;
-	    double pixel_center_x=0;
-	    double pixel_center_y=0;
-
+	    int    psize=0;
 	    theRPixDetTopology_.pixelRange(pixel_row,pixel_col,pixel_lower_x,pixel_upper_x,pixel_lower_y,pixel_upper_y);
-	    pixel_center_x = pixel_lower_x + (pixel_upper_x - pixel_lower_x)/2.;
-	    pixel_center_y = pixel_lower_y + (pixel_upper_y - pixel_lower_y)/2.;
-
+	    double pixel_width_x = pixel_upper_x-pixel_lower_x;
+	    double pixel_width_y = pixel_upper_y-pixel_lower_y;
+            if(pixel_row==0 || pixel_row==159) pixel_width_x = 0.1; // Correct edge pixel width
+            if(pixel_col==0 || pixel_col==155) pixel_width_y = 0.15; //
+	    double pixel_center_x = pixel_lower_x + (pixel_width_x)/2.;
+	    double pixel_center_y = pixel_lower_y + (pixel_width_y)/2.;
+	    int xbin=int((((*i).Y()-pixel_center_y)+pixel_width_y/2)*1.e3/5);
+            int ybin=int((((*i).X()-pixel_center_x)+pixel_width_x/2)*1.e3/5);
+//	    std::cout << "pixel_lower_x = " << pixel_lower_x << " pixel_upper_x = " << pixel_upper_x << " (*i).X() = " << (*i).X() << std::endl;
+//	    std::cout << "pixel_lower_y = " << pixel_lower_y << " pixel_upper_y = " << pixel_upper_y << " (*i).Y() = " << (*i).Y() << std::endl;
+	    if(pixel_width_x<0.11&&pixel_width_y<0.151) {  // pixel 100x150 um^2
+             psize = 0; 				    
+	     if(xbin>29||ybin>19) continue; // no charge map at dead width
+	    }
+	    if(pixel_width_x>0.11&&pixel_width_y<0.151) {  // pixel 200x150 um^2
+             psize = 2;
+             if(xbin>29||ybin>39) continue; // no charge map at dead width
+            } 
+	    if(pixel_width_x<0.11&&pixel_width_y>0.151) {  // pixel 100x300 um^2
+             psize = 1; 
+             if(xbin>59||ybin>19) continue; // no charge map at dead width
+            }
+	    if(pixel_width_x>0.11&&pixel_width_y>0.151) { // pixel 200x300 um^2
+             psize = 3;
+             if(xbin>59||ybin>39) continue; // no charge map at dead width
+            }
 	    double hit2neighbour[8];
-	    double collect_prob = hChargeMap->GetBinContent(hChargeMap->FindBin(((*i).Y()-pixel_center_y)*1.e3,((*i).X()-pixel_center_x)*1.e3));
+            double collect_prob = chargeshare2E[psize][xbin][ybin];
+//	    double collect_prob = hChargeMap->GetBinContent(hChargeMap->FindBin(((*i).Y()-pixel_center_y)*1.e3,((*i).X()-pixel_center_x)*1.e3));
+//            if(abs(((*i).Y()-pixel_center_y)*1.e3)>75||abs(((*i).X()-pixel_center_x)*1.e3)>50) continue;
+//            std::cout << collect_prob << " " << chargeshare2E[psize][int(((((*i).Y()-pixel_center_y)*1.e3)+75)/5+1)-1][int((((*i).X()-pixel_center_x)*1.e3+50)/5+1)-1] << "  x = " << ((*i).X()-pixel_center_x)*1.e3 << "  y = " << ((*i).Y()-pixel_center_y)*1.e3 << "  pixel_no = " << pixel_no << "  pixel size = " << psize <<  " " << pixel_upper_x-pixel_lower_x << " " << pixel_upper_y-pixel_lower_y  << " pixelRow = " << pixel_row << " pixelCol = " << pixel_col << std::endl;
+            std::cout << collect_prob << " " << chargeshare2E[psize][xbin][ybin] << "  x = " << ((*i).X()-pixel_center_x)*1.e3 << "  y = " << ((*i).Y()-pixel_center_y)*1.e3 << "  pixel_no = " << pixel_no << "  pixel size = " << psize <<  " " << pixel_upper_x-pixel_lower_x << " " << pixel_upper_y-pixel_lower_y  << " pixelRow = " << pixel_row << " pixelCol = " << pixel_col << std::endl;
 	    thePixelChargeMap[pixel_no] += charge_in_pixel*collect_prob;
 	    unsigned short neighbour_no[8];
 	    unsigned short m=0;

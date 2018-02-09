@@ -29,6 +29,10 @@ RPixDetDigitizer = cms.EDProducer("CTPPSPixelDigiProducer",
     # RPixLinearInduceCharge
 #    ChargeMapFile = cms.string("/afs/cern.ch/user/n/nogima/CMSSW_7_5_0/src/CNM_CT_PPS_10_4_ChargeMap_Angle_0_norm.root"),
     ChargeMapFile = cms.string("CNM_CT_PPS_10_4_ChargeMap_Angle_0_norm.root"),
+    ChargeMapFile2E      = cms.string("PixelChargeMap.txt"),
+    ChargeMapFile2E_2X   = cms.string("PixelChargeMap_2X.txt"),
+    ChargeMapFile2E_2Y   = cms.string("PixelChargeMap_2Y.txt"),
+    ChargeMapFile2E_2X2Y = cms.string("PixelChargeMap_2X2Y.txt"),
     RPixCoupling = cms.double(0.135), # fraction of the remaining charge going to the closer neighbour pixel. Value = 0.135, Value = 0.0 bypass the charge map and the charge sharing approach 
 
     # RPixDummyROCSimulator
