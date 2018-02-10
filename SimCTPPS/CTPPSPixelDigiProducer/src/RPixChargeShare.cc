@@ -21,8 +21,8 @@ RPixChargeShare::RPixChargeShare(const edm::ParameterSet &params, uint32_t det_i
   
   no_of_pixels_ = theRPixDetTopology_.detPixelNo();
 
-  fChargeMap = new TFile(ChargeMapFile_.c_str());
-  hChargeMap = (TH2D*)fChargeMap->Get("gChargeMap_Angle_0");
+  //fChargeMap = new TFile(ChargeMapFile_.c_str());
+  //hChargeMap = (TH2D*)fChargeMap->Get("gChargeMap_Angle_0");
 
   double xMap, yMap;
   double chargeprobcollect;

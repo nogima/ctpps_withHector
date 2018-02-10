@@ -24,8 +24,8 @@ private:
   int verbosity_;
   std::string ChargeMapFile_;
   std::string ChargeMapFile2E_[4];
-  TFile * fChargeMap;
-  TH2D * hChargeMap;
+//  TFile * fChargeMap;
+//  TH2D * hChargeMap;
 
 };
 
